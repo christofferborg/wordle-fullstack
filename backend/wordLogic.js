@@ -31,6 +31,4 @@ const compareWords = (guess, target) => {
   return output;
 };
 
-console.log(compareWords("hallå", "cykla"));
-
 module.exports = compareWords;

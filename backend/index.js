@@ -1,9 +1,11 @@
-import express from "express";
-import mongoose from "mongoose";
-import cors from "cors";
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const filteredWords = require("./wordService.js");
+const wordPicker = require("./wordPicker.js");
 
 const app = express();
-const port = 5080;
+const PORT = 5080;
 
 app.use(cors());
 app.use(express.json());
@@ -12,8 +14,8 @@ mongoose
   .connect("mongodb://localhost:27017/wordleDB")
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(port, () => {
-      console.log(`Servern körs på http://localhost:${port}`);
+    app.listen(PORT, () => {
+      console.log(`Servern körs på http://localhost:${PORT}`);
     });
   })
   .catch((err) => {
@@ -27,3 +29,15 @@ app.post("/api/words", async (req, res) => {
   await newWord.save();
   res.json(newWord);
 });
+
+app.get("/api/words/random", (req, res) => {
+  const length = parseInt(req.query.length);
+  const unique = req.query.unique === "true";
+  const randomWord = wordPicker(filteredWords, length, unique);
+  if (randomWord) {
+    return res.json({ word: randomWord });
+  } else res.status(404).json({ error: "No matching words." });
+});
+
+const testWord = wordPicker(filteredWords, 9, true);
+console.log(testWord)
