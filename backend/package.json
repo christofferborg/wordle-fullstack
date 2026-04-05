@@ -1,0 +1,31 @@
+{
+  "name": "wordle-uppgift-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christofferborg/wordle-uppgift-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christofferborg/wordle-uppgift-1/issues"
+  },
+  "homepage": "https://github.com/christofferborg/wordle-uppgift-1#readme",
+  "devDependencies": {
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.4.1"
+  },
+  "type": "module"
+}
