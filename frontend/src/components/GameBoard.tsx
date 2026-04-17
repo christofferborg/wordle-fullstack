@@ -1,31 +1,32 @@
 import { useState, useRef, useEffect } from "react";
 import type { LetterResult } from "../types";
 import Grid from "./Grid";
+import GameOverView from "./GameOverView";
 
 interface GameBoardProps {
   gameId: string;
   wordLength: number;
+  uniqueLetters: boolean;
+  onRestart: () => void;
 }
 
-function GameBoard({ gameId, wordLength }: GameBoardProps) {
-  const [inputValue, setInputValue] = useState<string>("");
+function GameBoard({ gameId, wordLength, uniqueLetters, onRestart }: GameBoardProps) {
+  const [inputValue, setInputValue] = useState("");
   const [guesses, setGuesses] = useState<LetterResult[][]>([]);
+  const [gameState, setGameState] = useState({ isOver: false, isWin: false });
+  const [duration, setDuration] = useState<number | null>(null);
 
-  // Referens för att styra fokus till inputfältet
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const focusInput = () => {
-    inputRef.current?.focus();
-  };
+  const focusInput = () => inputRef.current?.focus();
 
-  // Fokusera automatiskt när komponenten laddas in
   useEffect(() => {
     focusInput();
   }, []);
+  const [correctWord, setCorrectWord] = useState<string>("");
 
-  // Hantera själva gissningen mot backend
   const handleGuess = async () => {
-    if (inputValue.length !== wordLength) return;
+    if (inputValue.length !== wordLength || gameState.isOver) return;
 
     try {
       const response = await fetch("http://127.0.0.1:5080/api/games/guess", {
@@ -36,28 +37,51 @@ function GameBoard({ gameId, wordLength }: GameBoardProps) {
 
       if (response.ok) {
         const data = await response.json();
-        // Spara den nya gissningen i listan
-        setGuesses([...guesses, data.results]);
-        // Töm inputfältet
+
+        const newGuesses = [...guesses, data.results];
+        setGuesses(newGuesses);
         setInputValue("");
-        // Ge tillbaka fokus till fältet efter en mikropaus
-        setTimeout(focusInput, 0);
+
+        if (data.isFinished) {
+          const hasWon = data.results.every((r: any) => r.result === "correct");
+
+          setCorrectWord(data.correctWord);
+          setDuration(data.duration);
+          setGameState({ isOver: true, isWin: hasWon });
+        } else {
+          setTimeout(focusInput, 0);
+        }
       }
     } catch (error) {
-      console.error("Error making guess:", error);
+      console.error("Guess error:", error);
     }
   };
 
-  // Lyssna efter Enter-tryck i fältet
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && inputValue.length === wordLength) {
       handleGuess();
     }
   };
 
+  if (gameState.isOver) {
+    return (
+      <div className="flex flex-col items-center w-full">
+        <Grid guesses={guesses} currentGuess="" wordLength={wordLength} />
+        <GameOverView
+          isWin={gameState.isWin}
+          guessesCount={guesses.length}
+          onRestart={onRestart}
+          correctWord={correctWord}
+          duration={duration ?? null}
+          uniqueLetters={uniqueLetters}
+          wordLength={wordLength}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex flex-col items-center py-4">
-      {/* Rutnätet med alla gissningar */}
       <Grid
         guesses={guesses}
         currentGuess={inputValue}
@@ -74,9 +98,7 @@ function GameBoard({ gameId, wordLength }: GameBoardProps) {
             setInputValue(e.target.value.toUpperCase().slice(0, wordLength))
           }
           maxLength={wordLength}
-          placeholder=""
         />
-
         <button
           className={`py-3 rounded font-bold text-lg transition-all ${
             inputValue.length === wordLength
@@ -87,6 +109,12 @@ function GameBoard({ gameId, wordLength }: GameBoardProps) {
           disabled={inputValue.length !== wordLength}
         >
           GUESS
+        </button>
+        <button
+          onClick={onRestart}
+          className="cursor-pointer mt-2 text-xs font-bold text-gray-400 uppercase tracking-widest hover:text-red-600 transition-colors"
+        >
+          Give up and start new game?
         </button>
       </div>
     </div>

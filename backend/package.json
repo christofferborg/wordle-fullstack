@@ -2,10 +2,10 @@
   "name": "wordle-uppgift-1",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "src/server.ts",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon src/server.ts",
     "start": "nodemon src/server.ts"
   },
   "repository": {

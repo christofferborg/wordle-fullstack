@@ -8,7 +8,6 @@ const Grid = ({ guesses, currentGuess, wordLength }: GridProps) => {
   const totalRows = 6;
   const emptyRowsCount = Math.max(0, totalRows - guesses.length - 1);
 
-  // Mappar dina resultat-strängar till rätt Tailwind-färger
   const getBgColor = (result: string) => {
     switch (result) {
       case "correct":
@@ -24,7 +23,6 @@ const Grid = ({ guesses, currentGuess, wordLength }: GridProps) => {
 
   return (
     <div className="flex flex-col gap-2 mb-8">
-      {/* 1. Gamla gissningar */}
       {guesses.map((row, i) => (
         <div key={i} className="flex gap-2 justify-center">
           {row.map((cell, j) => (
@@ -37,10 +35,8 @@ const Grid = ({ guesses, currentGuess, wordLength }: GridProps) => {
           ))}
         </div>
       ))}
-
-      {/* 2. Aktiv rad (där du skriver nu) */}
       {guesses.length < totalRows && (
-        <div className="flex gap-2 justify-center">
+        <div data-testid="test" className=" flex gap-2 justify-center">
           {Array.from({ length: wordLength }).map((_, i) => (
             <div
               key={i}
@@ -51,12 +47,10 @@ const Grid = ({ guesses, currentGuess, wordLength }: GridProps) => {
           ))}
         </div>
       )}
-
-      {/* 3. Framtida tomma rader */}
       {Array.from({ length: emptyRowsCount }).map((_, i) => (
         <div key={i} className="flex gap-2 justify-center">
           {Array.from({ length: wordLength }).map((_, j) => (
-            <div key={j} className="w-14 h-14 border-2 border-gray-200"></div>
+            <div key={j} className=" w-14 h-14 border-2 border-gray-200"></div>
           ))}
         </div>
       ))}
