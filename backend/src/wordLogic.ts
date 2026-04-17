@@ -1,14 +1,20 @@
-const compareWords = (guess, target) => {
+interface LetterResult {
+  letter: string;
+  result: 'correct' | 'misplaced' | 'incorrect';
+}
+
+const compareWords = (guess: string, target: string): LetterResult[] => {
   if (guess.length !== target.length) {
     throw new Error("Input must have same length as the target word");
   }
   const upperGuess = guess.toUpperCase();
   const upperTarget = target.toUpperCase();
-  const targetLetters = upperTarget.split("");
-  const output = [];
+  const targetLetters: (string | number)[] = upperTarget.split("");
+
+  const output: LetterResult[] = [];
   for (let i = 0; i < upperGuess.length; i++) {
-    const letterResult = {
-      letter: upperGuess[i],
+    const letterResult: LetterResult = {
+      letter: upperGuess[i] as string,
       result: "incorrect",
     };
     if (upperGuess[i] === upperTarget[i]) {
@@ -20,7 +26,8 @@ const compareWords = (guess, target) => {
   }
 
   for (let i = 0; i < upperGuess.length; i++) {
-    const index = targetLetters.indexOf(upperGuess[i]);
+    const currentLetter = upperGuess[i] as string;
+    const index = targetLetters.indexOf(currentLetter);
     if (output[i].result === "correct") {
       continue;
     } else if (index > -1) {
@@ -31,4 +38,4 @@ const compareWords = (guess, target) => {
   return output;
 };
 
-module.exports = compareWords;
+export default compareWords;

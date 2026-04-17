@@ -1,4 +1,10 @@
-function wordPicker(list, length, unique) {
+import { WordPickerOptions } from "./types";
+
+function wordPicker(
+  list: string[],
+  length: number,
+  unique: boolean,
+): string | null {
   let filteredList = list.filter((word) => word.length === length);
   if (unique) {
     filteredList = filteredList.filter((word) => {
@@ -12,4 +18,4 @@ function wordPicker(list, length, unique) {
   return filteredList[randomIndex];
 }
 
-module.exports = wordPicker;
+export default wordPicker;

@@ -2,10 +2,11 @@
   "name": "wordle-uppgift-1",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.ts",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon index.js"
+    "dev": "nodemon server.ts",
+    "start": "nodemon src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,17 @@
   },
   "homepage": "https://github.com/christofferborg/wordle-uppgift-1#readme",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "@types/supertest": "^7.2.0",
     "jest": "^30.3.0",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
   },
   "dependencies": {
     "cors": "^2.8.6",

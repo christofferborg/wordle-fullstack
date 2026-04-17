@@ -1,4 +1,5 @@
-const filteredWords = require("../wordService");
+import { describe, test, expect } from "@jest/globals";
+import filteredWords from "../src/wordService";
 
 test("Real word list should only contain valid words", () => {
   expect(filteredWords.length).toBeGreaterThan(0);

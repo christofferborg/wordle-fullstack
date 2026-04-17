@@ -1,4 +1,5 @@
-const wordPicker = require("../wordPicker.js");
+import { describe, test, expect } from "@jest/globals";
+import wordPicker from "../src/wordPicker";
 
 const mockWordList = ["piano", "ball", "house", "apple"];
 

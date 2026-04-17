@@ -1,4 +1,5 @@
-const compareWords = require("../wordLogic.js");
+import { describe, test, expect } from "@jest/globals";
+import compareWords from "../src/wordLogic";
 
 test("should return correct for the word HEJ", () => {
   let expectedOutput = [
@@ -53,4 +54,25 @@ test("should return misplaced for only the first occurrence of a letter if targe
     { letter: "Å", result: "incorrect" },
   ];
   expect(compareWords("HALLÅ", "CYKLA")).toEqual(expectedOutput);
+});
+
+describe("compareWords logic", () => {
+  test("should handle a perfect match (all correct)", () => {
+    const result = compareWords("CYKLA", "CYKLA");
+    result.forEach((res) => {
+      expect(res.result).toBe("correct");
+    });
+  });
+
+  test("should handle misplaced letters", () => {
+    const result = compareWords("ALPEN", "PAPPA");
+    // Här kan vi testa specifika index för att se att din logik
+    // med 0-markeringen (targetLetters[i] = 0) fungerar
+    expect(result[0].letter).toBe("A");
+    expect(result[0].result).toBe("misplaced");
+  });
+
+  test("should throw error if lengths do not match", () => {
+    expect(() => compareWords("HEJ", "HEJSAN")).toThrow();
+  });
 });
